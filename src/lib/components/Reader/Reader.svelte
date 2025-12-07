@@ -10,9 +10,7 @@
     toggleFullScreen,
     zoomDefault,
     zoomDefaultWithLayoutWait,
-    zoomFitToScreen,
-    zoomNotification,
-    handleWheel as panzoomHandleWheel
+    zoomFitToScreen
   } from '$lib/panzoom';
   import {
     effectiveVolumeSettings,
@@ -363,16 +361,6 @@
         zoomFitToScreen();
       }
     }
-  }
-
-  // Wheel handler wrapper that excludes settings drawer and popovers
-  function handleWheelEvent(e: WheelEvent) {
-    const target = e.target as HTMLElement;
-    // Don't capture wheel events from settings drawer or popovers
-    if (target.closest('#settings') || target.closest('[data-popover]')) {
-      return;
-    }
-    panzoomHandleWheel(e);
   }
 
   onMount(() => {
@@ -748,14 +736,6 @@
       notificationKey = '';
     }, 2000);
   }
-
-  // Subscribe to zoom notifications from panzoom
-  $effect(() => {
-    const zoom = $zoomNotification;
-    if (zoom) {
-      showNotification(`${zoom.percent}%`, `zoom-${zoom.timestamp}`);
-    }
-  });
 
   function rotatePageMode() {
     if (!volume) return;
